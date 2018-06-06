@@ -12,7 +12,7 @@
   * Special thanks to
   *   Aitorvs: https://github.com/aitorvs/tiny-coverage
   *   Tejainece: https://github.com/tejainece/tcov
-  *   Erich Styger: https://mcuoneclipse.com
+  *   Erich Styger: https://mcuoneclipse.com/2014/12/26/code-coverage-for-embedded-target-with-eclipse-gcc-and-gcov
   *
  */
 
