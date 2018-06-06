@@ -13,4 +13,6 @@ Normally gcov does use a filesystem do dump out the coverage data. If used on a 
 This method works pretty good for me. I addded some shell scripts to my makefile to do all these steps automatically. It works pretty fine. Much fun with it!
 
 NOTE: Works for me with arm-none-eabi-gcc (GNU Tools for ARM Embedded Processors) 5.4.1 
+
+TIP: Use Gcovr which is parsing and reporting tool for gcov to produce html reports: https://gcovr.com/
   
