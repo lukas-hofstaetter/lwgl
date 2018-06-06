@@ -35,3 +35,17 @@ int _write(int file, char *ptr, int len) {
 
   return len;  // amount of data, without the filename
 }
+
+void static_init(void) {
+  /* linker defined symbols, array of function pointers */
+  extern uint32_t __init_array_start, __init_array_end;
+  uint32_t beg = (uint32_t) & __init_array_start;
+  uint32_t end = (uint32_t) & __init_array_end;
+
+  while (beg < end) {
+    void (**p)(void);
+    p = (void (**)(void)) beg; /* get function pointer */
+    (*p)(); /* call constructor */
+    beg += sizeof(p); /* next pointer */
+  }
+}
