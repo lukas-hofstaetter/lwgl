@@ -209,6 +209,7 @@ size_t convert_to_gcda(uint8_t *buffer, struct gcov_info *info) {
 /**
  * Dumps the coverage data to file system
  * @return Zero on success
+ * @note Using the subs in syscalls.c will use a kind of leight weight filesystem which uses the serial interface to transfer the coverage data from the embedded platform to a host computer.
  */
 int coverage_dump() {
   struct gcov_info *tmp = gcov_info_head;
@@ -221,8 +222,8 @@ int coverage_dump() {
       return -ENOMEM;
     convert_to_gcda(buffer, tmp);
 
-    f = open(tmp->filename, 0);
-    ret = write(f, buffer, size);
+    f = open(tmp->filename, 0);  // Calls _open in syscalls
+    ret = write(f, buffer, size);   // Calls _write in syscalls
     if(ret != size)
       return ret;
 
