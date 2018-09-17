@@ -51,16 +51,16 @@ echo -n "$FILES" > $INPUT.files
 echo "  LWFS    Extracted $(wc -c <$INPUT.files) file characters"
 echo "  LWFS    Extracted $(wc -c <$INPUT.data) text characters"
 
-if [ -s  $INPUT.files]; then
+if [ -s  $INPUT.files ]; then
+	#Write the files
+	while read -r file; do
+		NAME=`grep -o -P "(?<=$START)(.+)(?=$SEPARATOR)" <<< $file`
+		DATA=`grep -o -P "(?<=$SEPARATOR)(.+)" <<< $file`
+		echo "  LWFS    Creating file: `realpath --relative-to="$WD" "$NAME"` (${#file} bytes)"
+		echo $DATA | xxd -r -p - $NAME
+		#FIXME Non-existend folders must be created before dumping the data via xxd
+	done <<< "$FILES"
+else
 	echo "Error: No coverage files.";
 	exit 1;
 fi
-
-#Write the files
-while read -r file; do
-	NAME=`grep -o -P "(?<=$START)(.+)(?=$SEPARATOR)" <<< $file`
-	DATA=`grep -o -P "(?<=$SEPARATOR)(.+)" <<< $file`
-	echo "  LWFS    Creating file: `realpath --relative-to="$WD" "$NAME"` (${#file} bytes)"
-	echo $DATA | xxd -r -p - $NAME
-	#FIXME Non-existend folders must be created before dumping the data via xxd
-done <<< "$FILES"
