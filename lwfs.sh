@@ -57,6 +57,7 @@ if [ -s  $INPUT.files ]; then
 		NAME=`grep -o -P "(?<=$START)(.+)(?=$SEPARATOR)" <<< $file`
 		DATA=`grep -o -P "(?<=$SEPARATOR)(.+)" <<< $file`
 		echo "  LWFS    Creating file: `realpath --relative-to="$WD" "$NAME"` (${#file} bytes)"
+		rm -f $NAME
 		echo $DATA | xxd -r -p - $NAME
 		#FIXME Non-existend folders must be created before dumping the data via xxd
 	done <<< "$FILES"
