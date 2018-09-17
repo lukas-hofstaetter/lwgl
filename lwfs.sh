@@ -1,18 +1,18 @@
 #!/bin/bash
 
 #
-#This script removes all fileinformation from given Input file and creates all files specified by the fileinformation.
+#This script removes all file information from given input file and creates all files by specified syntax.
 #
-# Usage: ./lwfs.sh inputFile.txt
+#Usage: ./lwfs.sh inputFile.txt
 #
 #Example of inputFile.txt file:
 #	Some Random Text
 #	Blabla ...
 #	*/home/user/foo.log< 48 65 6c 6c 6f 20 57 6f  72 6c 64 0a
 #	Some more text ...
-#	*../bar.txt< 54 77 65 6e 74 79 20 66  6f 75 72 20 69 73 20 74 54 77 65 6e 74 79 20 66  6f 75 72 20 69 73 20 74
+#	*../bar.txt< 54 77 65 6e 74 79 20 66  6f 75 72 20 69 73 20 74 54 77 65 6e 74 79 20 66 6f 75 72 20 69 73 20 74
 #
-#Will be converted to three files foo.log, bar.txt, inputFile.txt.data and inputFile.txt.files
+#Will be converted to foo.log, bar.txt, inputFile.txt.data and inputFile.txt:
 #
 #foo.log:
 #	Hello World
@@ -27,7 +27,7 @@
 #
 #inputFile.txt.files:
 #	*/home/user/foo.log< 48 65 6c 6c 6f 20 57 6f  72 6c 64 0a
-#	*../bar.txt< 54 77 65 6e 74 79 20 66  6f 75 72 20 69 73 20 74 54 77 65 6e 74 79 20 66  6f 75 72 20 69 73 20 74
+#	*../bar.txt< 54 77 65 6e 74 79 20 66  6f 75 72 20 69 73 20 74 54 77 65 6e 74 79 20 66 6f 75 72 20 69 73 20 74
 #
 
 if [ -n "$V" ] 
@@ -46,8 +46,15 @@ echo "  LWFS    Extracting file information and text from $INPUT. ($(wc -c <"$IN
 echo "  LWFS    Working directory: $WD"
 FILES=`egrep -a "$START(.+)$SEPARATOR[1234567890 ABCDEF]+" $INPUT`
 TEXT=`egrep -av "$START(.+)$SEPARATOR[1234567890 ABCDEF]+" $INPUT`
-echo "$TEXT" > $INPUT.data
-echo "$FILES" > $INPUT.files
+echo -n "$TEXT" > $INPUT.data
+echo -n "$FILES" > $INPUT.files
+echo "  LWFS    Extracted $(wc -c <$INPUT.files) file characters"
+echo "  LWFS    Extracted $(wc -c <$INPUT.data) text characters"
+
+if [ -s  $INPUT.files]; then
+	echo "Error: No coverage files.";
+	exit 1;
+fi
 
 #Write the files
 while read -r file; do
